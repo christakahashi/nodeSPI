@@ -2,12 +2,66 @@
 #include <node.h>
 
 #include<fcntl.h>
+//#include<stdio.h> //for debug only
 #include<string>
 extern "C" {
 #include "spi.h"
 }
 
 using namespace v8;
+
+/*
+function name: initSPI
+inputs:
+	args[0]: spi mode 
+	args[1]: max clock speed
+	args[2]: device name (eg '/dev/spidev0.1')
+returns:
+	undefined
+*/
+Handle<Value> initSPI(const Arguments& args) {
+	HandleScope scope;
+
+	//Check inputs
+	if (args.Length() < 2) {
+		ThrowException(
+			Exception::TypeError(String::New("Wrong number of arguments")));
+		return scope.Close(Undefined());
+	}
+	if (!args[0]->IsNumber() || !args[1]->IsNumber()) {
+		ThrowException(Exception::TypeError(String::New("Wrong arguments")));
+		return scope.Close(Undefined());
+	}
+
+	//unpack args
+	int spi_mode = args[0]->Int32Value();
+	int clk_speed = args[1]->Int32Value();
+	if (spi_mode<0 || spi_mode>4){
+		ThrowException(Exception::Error(String::New("invalid spi mode")));
+		return scope.Close(Undefined());
+	}
+	if (clk_speed<0 ){
+		ThrowException(Exception::Error(String::New("invalid clock speed")));
+		return scope.Close(Undefined());
+	}
+
+	v8::String::Utf8Value inputString(args[2]->ToString());
+	std::string devicePath = std::string(*inputString);
+	int fd = open(devicePath.c_str(), O_RDWR);
+	if (fd <0) {
+		ThrowException(Exception::Error(String::New("Can't open SPI device")));
+		return scope.Close(Undefined());
+	}
+
+	if (!initSPI(fd, (uint8_t)spi_mode, (int32_t)clk_speed)) {
+		ThrowException(
+			Exception::Error(String::New("unable to configure SPI")));
+		return scope.Close(Undefined());
+	}
+
+	return scope.Close(Undefined());
+}
+
 
 
 /*
@@ -71,6 +125,8 @@ Handle<Value> readSPI(const Arguments& args) {
 void Init(Handle<Object> target) {
 	target->Set(String::NewSymbol("readSPI"),
 			FunctionTemplate::New(readSPI)->GetFunction());
+	target->Set(String::NewSymbol("initSPI"),
+			FunctionTemplate::New(initSPI)->GetFunction());
 }
 
 NODE_MODULE(rSPI, Init)
