@@ -1,1 +1,18 @@
-test text
+############## BUILD INSTRUCTIONS #################
+# Requires:
+# npm
+apt-get -y install npm
+# and node-gyp
+npm install -g node-gyp
+
+#then you must configure the package:
+node-gyp configure
+#and finally build
+node-gyp build
+
+#the addon is now in /build/Release/*.node
+#to use the addon move rSPI.node to either the global node_modules directory or
+#place it in a your a folder called node_modules with in your project directory
+
+
+
