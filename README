@@ -1,4 +1,18 @@
-############## BUILD INSTRUCTIONS #################
+##################### USAGE ######################
+#from nodejs script include with
+#var spi = require('./path/to/module/rSPI')
+#
+#functions:
+#spi.configSPI(mode,max_clock,device)
+#    takes SPI mode, clock rate, and device path (eg /dev/spidev0.1 )
+#    If system defaults are okay then no need to call configSPI
+#spi.readwriteSPI(tx_data,device)
+#    takes a device path, and an array of numbers interpreted as bytes
+#    writes bytes and returs the same number of read bytes from spidev
+#see code comments for more details
+#
+
+############### BUILD INSTRUCTIONS ###############
 # Requires:
 # npm
 apt-get -y install npm

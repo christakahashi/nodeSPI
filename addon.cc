@@ -11,7 +11,7 @@ extern "C" {
 using namespace v8;
 
 /*
-function name: initSPI
+function name: configSPI
 inputs:
 	args[0]: spi mode 
 	args[1]: max clock speed
@@ -19,7 +19,7 @@ inputs:
 returns:
 	undefined
 */
-Handle<Value> initSPI(const Arguments& args) {
+Handle<Value> configSPI(const Arguments& args) {
 	HandleScope scope;
 
 	//Check inputs
@@ -65,14 +65,14 @@ Handle<Value> initSPI(const Arguments& args) {
 
 
 /*
-function name: readSPI
+function name: readwriteSPI
 inputs:
 	args[0]: js array of numbers to transmit over SPI
 	args[1]: js string of the spi device to use (eg '/dev/spidev0.1' )
 returns:
 	js array of bytes received (as Numbers).
 */
-Handle<Value> readSPI(const Arguments& args) {
+Handle<Value> readwriteSPI(const Arguments& args) {
 	HandleScope scope;
 
 	//Check inputs
@@ -123,10 +123,10 @@ Handle<Value> readSPI(const Arguments& args) {
 }
 
 void Init(Handle<Object> target) {
-	target->Set(String::NewSymbol("readSPI"),
-			FunctionTemplate::New(readSPI)->GetFunction());
-	target->Set(String::NewSymbol("initSPI"),
-			FunctionTemplate::New(initSPI)->GetFunction());
+	target->Set(String::NewSymbol("readwriteSPI"),
+			FunctionTemplate::New(readwriteSPI)->GetFunction());
+	target->Set(String::NewSymbol("configSPI"),
+			FunctionTemplate::New(configSPI)->GetFunction());
 }
 
 NODE_MODULE(rSPI, Init)

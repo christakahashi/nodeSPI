@@ -1,6 +1,7 @@
 # My Additions #
 ################
 build
+*.swp
 
 # Compiled source #
 ###################

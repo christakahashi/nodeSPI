@@ -1,7 +1,6 @@
-
 var rspi = require('./build/Release/rSPI');
 
-var result = rspi.readSPI([96,0,0],'/dev/spidev0.1');
+var result = rspi.readwriteSPI([96,0,0],'/dev/spidev0.1');
 var adcread = ((result[1]<<2) | (result[2]>>>6))*3.3/1024;
 var resistance = 3.3*10000/adcread - 10000;
 
