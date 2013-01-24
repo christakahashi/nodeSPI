@@ -12,7 +12,7 @@ returns:
     0 -> okay; request fulfilled.
     1 -> fail.  
 */
-int spiRW(int, uint8_t*, uint8_t*);
+int spiRW(int fd, unsigned int len, uint8_t* tx, uint8_t* rx);
 
 /*
 inputs:

@@ -108,7 +108,7 @@ Handle<Value> readwriteSPI(const Arguments& args) {
 	}
 
 	//do the spi RW
-	if(spiRW(fd,tx_buf,rx_buf)) {
+	if(spiRW(fd,message_length,tx_buf,rx_buf)) {
 		ThrowException(Exception::Error(String::New("SPI read/write failed.")));
 		return scope.Close(Undefined());
 	}

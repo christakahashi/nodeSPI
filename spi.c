@@ -14,6 +14,7 @@ static uint16_t delay = 0;
 /*
 inputs: 
   fd: an open file descriptor
+  len: lenth of message
   tx: pointer to byte array to be transmitted
 outputs:
   rx: pointer to byte array AT LEAST AS LARGE AS tx used for received bytes
@@ -23,14 +24,14 @@ RETURNS:
     0 -> okay; request fulfilled.
     1 -> fail.  
 */
-int spiRW(int fd, uint8_t *tx, uint8_t *rx)
+int spiRW(int fd, unsigned int len,uint8_t *tx, uint8_t *rx)
 {
 	int ret;
 
 	struct spi_ioc_transfer tr = {
 		.tx_buf = (uintptr_t)tx,
 		.rx_buf = (uintptr_t)rx,
-		.len = sizeof(tx)/sizeof(tx[0]),
+		.len = len,
 		.delay_usecs = delay,
 		.speed_hz = 0,
 		.bits_per_word = 0,
