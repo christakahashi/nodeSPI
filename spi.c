@@ -39,7 +39,7 @@ int spiRW(int fd, unsigned int len,uint8_t *tx, uint8_t *rx)
 	};
 
 	ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
-	if (ret == 1)
+	if (ret < 0) //CONTRARY to kernel doc example ret is num bytes sent
 		return -1; //can't send spi message
 
 	return 0;
