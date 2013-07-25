@@ -54,11 +54,13 @@ Handle<Value> configSPI(const Arguments& args) {
 	}
 
 	if (!initSPI(fd, (uint8_t)spi_mode, (int32_t)clk_speed)) {
+		close(fd);
 		ThrowException(
 			Exception::Error(String::New("unable to configure SPI")));
 		return scope.Close(Undefined());
 	}
 
+	close(fd);
 	return scope.Close(Undefined());
 }
 
@@ -109,9 +111,11 @@ Handle<Value> readwriteSPI(const Arguments& args) {
 
 	//do the spi RW
 	if(spiRW(fd,message_length,tx_buf,rx_buf)) {
+		close(fd);
 		ThrowException(Exception::Error(String::New("SPI read/write failed.")));
 		return scope.Close(Undefined());
 	}
+	close(fd);
 
 //////////////////PACK UP OUTPUTS/////////////////////
 	Local<Array> outputArray = Array::New(message_length);
